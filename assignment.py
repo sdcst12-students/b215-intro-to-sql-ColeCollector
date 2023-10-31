@@ -24,47 +24,106 @@ need to use.
 """
 
 import sqlite3
-def create():
+class database:
+    def create():
 
-    file = 'dbase.db'
-    connection = sqlite3.connect(file)
-    cursor = connection.cursor()
+        file = 'dbase.db'
+        connection = sqlite3.connect(file)
+        cursor = connection.cursor()
 
-    query = """
-    create table if not exists pets (
-        id integer primary key autoincrement,
-        petname tinytext,
-        species tinytext,
-        breed tinytext,
-        owner tinytext,
-        phonenum int,
-        email tinytext,
-        balance smallint,
-        lastdate date);
-    """
-    cursor.execute(query)
-    cursor.execute('PRAGMA table_info(pets);')
-    result = cursor.fetchall()
-    for i in result:
-        print(i)
-
-def insert():
-    file = 'dbase.db'
-    connection = sqlite3.connect(file)
-    cursor = connection.cursor()
-    petname = input("Pet's name:")
-    species = input("Pet's species:")
-    breed = input("Pet's breed:")
-    owner = input("Owner's name:")
-    phonenum = input("Phone number:")
-    email = input("Email:")
-
-    data = [[petname,species,breed,owner,phonenum,email,"0","0"]]
-    
-    for i in data:
-        query = f"insert into pets (petname,species,breed,owner,phonenum,email,balance,lastdate) values ('{i[0]}','{i[1]}',{i[2]},{i[3]},{i[4]},{i[5]},{i[6]},{i[7]});"
-        print(query)
+        query = """
+        create table if not exists pets (
+            id integer primary key autoincrement,
+            petname tinytext,
+            species tinytext,
+            breed tinytext,
+            owner tinytext,
+            phonenum int,
+            email tinytext,
+            balance smallint,
+            lastdate date);
+        """
         cursor.execute(query)
+        cursor.execute('PRAGMA table_info(pets);')
 
-create()
-insert()
+    def insert():
+        from datetime import date
+        connection = sqlite3.connect('dbase.db')
+        cursor = connection.cursor()
+        petname = input("\nPet's name:")
+        species = input("Pet's species:")
+        breed = input("Pet's breed:")
+        owner = input("Owner's name:")
+
+        while True:
+            try:
+                phonenum = int(input("Phone number:"))
+                break
+            except:
+                print("That is not a valid input")
+                
+        email = input("Email:")
+
+        data = [petname,species,breed,owner,phonenum,email,"0",f"{date.today()}"]
+        query = f"insert into pets (petname,species,breed,owner,phonenum,email,balance,lastdate) values ('{data[0]}','{data[1]}','{data[2]}','{data[3]}','{data[4]}','{data[5]}','{data[6]}','{data[7]}');"
+        cursor.execute(query)
+        connection.commit()
+
+    def getinfo():
+        choice = input("\n1: Find account with id\n2: Find account with email\n3: Find account with phone number\nYour choice:")
+        connection = sqlite3.connect('dbase.db')
+        cursor = connection.cursor()
+
+        while True:
+            if choice == "1":
+                try:
+                    x = int(input("What is your id number"))
+                    query = f"select * from pets where id = {x}"
+                    break
+                except:
+                    pass
+                
+            elif choice == "2":
+                try:
+                    x = input("What is your email")
+                    query = f"select * from pets where email = {x}"
+                    break
+                except:
+                    pass
+
+            elif choice == "3":
+                try:
+                    x = int(input("What is your phone number"))
+                    query = f"select * from pets where phonenum = {x}"
+                    break
+                except:
+                    print("None found")
+                
+        cursor.execute(query)
+        result = cursor.fetchall()
+        for i in result:
+            print(i)
+
+    def printall():
+
+        connection = sqlite3.connect('dbase.db')
+        
+        cursor = connection.cursor()
+        query = "select * from pets"
+        cursor.execute(query)
+        result = cursor.fetchall()
+
+        for i in result:
+            print(i)
+
+database.create()
+choice = input("1: Enter a record\n2: Retrieve info\n3: Print Data\nYour choice:")
+
+if choice == "1":
+    database.insert()
+                                                             
+if choice == "2":
+    database.getinfo()
+
+if choice == "3":
+    database.printall()
