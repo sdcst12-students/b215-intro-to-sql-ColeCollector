@@ -25,7 +25,21 @@ need to use.
 
 import sqlite3
 class database:
-    def create():
+    def __init__(self):
+        self.create()
+        while True:
+            choice = input("\n1: Enter a record\n2: Retrieve info\n3: Print Data\nYour choice:")
+
+            if choice == "1":
+                database.insert()
+                                                                        
+            elif choice == "2":
+                database.getinfo()
+
+            elif choice == "3":
+                database.printall()
+
+    def create(self):
 
         file = 'dbase.db'
         connection = sqlite3.connect(file)
@@ -64,43 +78,46 @@ class database:
                 
         email = input("Email:")
 
-        data = [petname,species,breed,owner,phonenum,email,"0",f"{date.today()}"]
-        query = f"insert into pets (petname,species,breed,owner,phonenum,email,balance,lastdate) values ('{data[0]}','{data[1]}','{data[2]}','{data[3]}','{data[4]}','{data[5]}','{data[6]}','{data[7]}');"
+        query = f"insert into pets (petname,species,breed,owner,phonenum,email,balance,lastdate) values ('{petname}','{species}','{breed}','{owner}','{phonenum}','{email}','0','{date.today()}');"
         cursor.execute(query)
         connection.commit()
 
     def getinfo():
-        choice = input("\n1: Find account with id\n2: Find account with email\n3: Find account with phone number\nYour choice:")
         connection = sqlite3.connect('dbase.db')
         cursor = connection.cursor()
 
         while True:
+            choice = input("\n1: Find account with id\n2: Find account with email\n3: Find account with phone number\nYour choice:")
             if choice == "1":
                 try:
-                    x = int(input("What is your id number"))
-                    query = f"select * from pets where id = {x}"
-                    break
-                except:
-                    pass
-                
-            elif choice == "2":
-                try:
-                    x = input("What is your email")
-                    query = f"select * from pets where email = {x}"
-                    break
-                except:
-                    pass
-
-            elif choice == "3":
-                try:
-                    x = int(input("What is your phone number"))
-                    query = f"select * from pets where phonenum = {x}"
+                    x = int(input("ID: "))
+                    query = f"select * from pets where id = '{x}'"
                     break
                 except:
                     print("None found")
                 
+            elif choice == "2":
+                try:
+                    x = str(input("Email: "))
+                    query = f"select * from pets where email = '{x}'"
+                    break
+                except:
+                    print("None found")
+
+            elif choice == "3":
+                try:
+                    x = int(input("Phone number: "))
+                    query = f"select * from pets where phonenum = '{x}'"
+                    break
+                except:
+                    print("None found")
+
         cursor.execute(query)
         result = cursor.fetchall()
+        
+        if result == []:
+            print("None found")
+
         for i in result:
             print(i)
 
@@ -112,18 +129,8 @@ class database:
         query = "select * from pets"
         cursor.execute(query)
         result = cursor.fetchall()
-
+        
         for i in result:
             print(i)
 
-database.create()
-choice = input("1: Enter a record\n2: Retrieve info\n3: Print Data\nYour choice:")
-
-if choice == "1":
-    database.insert()
-                                                             
-if choice == "2":
-    database.getinfo()
-
-if choice == "3":
-    database.printall()
+database()
