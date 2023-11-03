@@ -94,7 +94,7 @@ class database:
                     query = f"select * from pets where id = '{x}'"
                     break
                 except:
-                    print("None found")
+                    print("That is not a valid input")
                 
             elif choice == "2":
                 try:
@@ -102,7 +102,7 @@ class database:
                     query = f"select * from pets where email = '{x}'"
                     break
                 except:
-                    print("None found")
+                    print("That is not a valid input")
 
             elif choice == "3":
                 try:
@@ -110,7 +110,7 @@ class database:
                     query = f"select * from pets where phonenum = '{x}'"
                     break
                 except:
-                    print("None found")
+                    print("That is not a valid input")
 
         cursor.execute(query)
         result = cursor.fetchall()
