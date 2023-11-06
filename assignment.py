@@ -24,6 +24,7 @@ need to use.
 """
 
 import sqlite3
+import time
 class database:
     def __init__(self):
         self.create()
@@ -120,6 +121,18 @@ class database:
 
         for i in result:
             print(i)
+            print(f"\nID:{i[0]}")
+            print(f"Pet's name:{i[1]}")
+            print(f"Pet's species:{i[2]}")
+            print(f"Pet's breed:{i[3]}")
+            print(f"Owner:{i[4]}")
+            print(f"Phone Number:{i[5]}")
+            print(f"Email:{i[6]}")
+            print(f"Balance:{i[7]}")
+            print(f"Date:{i[8]}")
+        time.sleep(1)
+
+
 
     def printall():
 

@@ -19,7 +19,7 @@ class NPC:
         self.create()
         for i in range(100):
             self.insert()
-            self.printall()
+        self.printall()
 
     def randItem(self,options):
         x = list(options.keys())
@@ -71,7 +71,8 @@ class NPC:
         connection = sqlite3.connect('dbase.db')
         cursor = connection.cursor()
         cursor.execute('drop table npcs')
-        
+        connection.commit()
+
         query = """
         create table if not exists npcs (
             id integer primary key autoincrement,
@@ -84,9 +85,11 @@ class NPC:
             armor tinytext,
             headware tinytext,
             chestplate tinytext,
-            shield tinytext);
+            shield tinytext);           
         """
+        
         cursor.execute(query)
+        
         cursor.execute('PRAGMA table_info(npcs);')
 
     def printall(self):
